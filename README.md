@@ -1,4 +1,4 @@
-This pipeline processes HIVE-style scRNA-seq data through a complete workflow including read merging, alignment, BAM processing, and gene quantification (Seurat objet creation is optional). It's optimized for high-throughput processing with multi-threading support and memory-efficient streaming algorithms. The run is done in four main steps, each handling specific aspects of the analysis workflow.
+This pipeline processes HIVE-style scRNA-seq data through a complete workflow including read merging, alignment, BAM processing, and gene quantification (Seurat object creation is optional). It's optimized for high-throughput processing with multi-threading support and memory-efficient streaming algorithms. The run is done in four main steps, each handling specific aspects of the analysis workflow.
 
 General workflow:
 Raw FASTQ Files (R1/R2) → Merge R1/R2 + Extract Barcodes/UMIs → Align to Reference Genome (HISAT2) → BAM Processing & Sorting → Stream Parse BAM Files →  Map Reads to Genes → 
@@ -25,3 +25,17 @@ Steps to run the pipeline:
 ### 4. Create Expression Matrix
 	# Gets merged_duplicate_reads.txt and creates a Gene x Cell matrix to be exported to R
 		 python -u ./create_count_matrix.py duplicate_reads.txt chromosome_dict.pkl -o expression_matrix.txt -m 5000 > mapping_output.log 2>&1 &
+
+### 5. Create Seurat Object
+	# Creates a clean Seurat Object 
+ 		# Load libraries and helper functions
+		library(Seurat) 
+		library(dplyr)
+		source('./seurat_funcs.R')
+		
+		# Import expression matrix and process
+		expr_matrix <- read.table("expression_matrix.txt", header = TRUE, row.names = 1, sep = "\t")
+		so.init <- CreateSeuratObject(counts = expr_matrix)
+		so.clean <- clean_S.O(so.init)
+		so.processed <- prep_S.O(so.clean)
+		saveRDS(so.processed, "seurat_object.rds")
