@@ -1,8 +1,8 @@
-This pipeline processes HIVE-style scRNA-seq data through a complete workflow including read merging, alignment, BAM processing, and gene quantification (Seurat object creation is optional). It's optimized for high-throughput processing with multi-threading support and memory-efficient streaming algorithms. The run is done in four main steps, each handling specific aspects of the analysis workflow.
+This pipeline processes HIVE-style scRNA-seq data through a complete workflow including read merging, alignment, BAM processing, and gene quantification (doublet removal and Seurat object creation is optional). It's optimized for high-throughput processing with multi-threading support and memory-efficient streaming algorithms. The run is done in four main steps, each handling specific aspects of the analysis workflow.
 
 General workflow:
 Raw FASTQ Files (R1/R2) → Merge R1/R2 + Extract Barcodes/UMIs → Align to Reference Genome (HISAT2) → BAM Processing & Sorting → Stream Parse BAM Files →  Map Reads to Genes → 
-Gene × Cell Expression Matrix → Create Seurat object (optional)
+Gene × Cell Expression Matrix → Remove Doublet and Create Seurat object (optional)
 
 Steps to run the pipeline:
 ### 1. Prepare Reference Genome (once per organism)
