@@ -36,6 +36,3 @@ Steps to run the pipeline:
 		# Import expression matrix and process
 		expr_matrix <- read.table("expression_matrix.txt", header = TRUE, row.names = 1, sep = "\t")
 		so.init <- CreateSeuratObject(counts = expr_matrix)
-		so.clean <- clean_S.O(so.init)
-		so.processed <- prep_S.O(so.clean)
-		saveRDS(so.processed, "seurat_object.rds")
